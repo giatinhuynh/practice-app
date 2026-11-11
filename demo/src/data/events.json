@@ -1,0 +1,14 @@
+[
+  { "id": "EVT-001", "asset": "SYN-MEL-01", "region": "Melbourne", "status": "Healthy", "signal": "Link stable", "observedAt": "2026-10-21T00:42:00Z" },
+  { "id": "EVT-002", "asset": "SYN-GEE-02", "region": "Geelong", "status": "Healthy", "signal": "Link stable", "observedAt": "2026-10-21T00:41:00Z" },
+  { "id": "EVT-003", "asset": "SYN-BAL-03", "region": "Ballarat", "status": "Healthy", "signal": "Capacity normal", "observedAt": "2026-10-21T00:40:00Z" },
+  { "id": "EVT-004", "asset": "SYN-BEN-04", "region": "Bendigo", "status": "Healthy", "signal": "Link stable", "observedAt": "2026-10-21T00:39:00Z" },
+  { "id": "EVT-005", "asset": "SYN-MEL-05", "region": "Melbourne", "status": "Healthy", "signal": "Capacity normal", "observedAt": "2026-10-21T00:38:00Z" },
+  { "id": "EVT-006", "asset": "SYN-GEE-06", "region": "Geelong", "status": "Healthy", "signal": "Link stable", "observedAt": "2026-10-21T00:37:00Z" },
+  { "id": "EVT-007", "asset": "SYN-MEL-07", "region": "Melbourne", "status": "Degraded", "signal": "Elevated latency", "observedAt": "2026-10-21T00:36:00Z" },
+  { "id": "EVT-008", "asset": "SYN-BAL-08", "region": "Ballarat", "status": "Degraded", "signal": "Packet loss", "observedAt": "2026-10-21T00:35:00Z" },
+  { "id": "EVT-009", "asset": "SYN-BEN-09", "region": "Bendigo", "status": "Degraded", "signal": "Capacity warning", "observedAt": "2026-10-21T00:34:00Z" },
+  { "id": "EVT-010", "asset": "SYN-GEE-10", "region": "Geelong", "status": "Offline", "signal": "No heartbeat", "observedAt": "2026-10-21T00:33:00Z" },
+  { "id": "EVT-011", "asset": "SYN-MEL-11", "region": "Melbourne", "status": "Offline", "signal": "Link unavailable", "observedAt": "2026-10-21T00:32:00Z" },
+  { "id": "EVT-012", "asset": "SYN-BEN-12", "region": "Bendigo", "status": "Offline", "signal": "No heartbeat", "observedAt": "2026-10-21T00:31:00Z" }
+]

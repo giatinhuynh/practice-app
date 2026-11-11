@@ -1,0 +1,56 @@
+name: Agent-ready task
+description: A small, well-scoped change that a person or Claude can implement and verify against explicit acceptance criteria.
+title: "[Task]: "
+labels: ["agent-ready"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Write this issue as the agent's contract. Keep it to one observable behaviour.
+        Synthetic NetworkOps Lite data only: no production systems, customer data or credentials.
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome
+      description: Who needs what, and why? Describe the observable behaviour, not the implementation.
+      placeholder: An operator selects Degraded and sees only the three Degraded events, with a matching visible count.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Testable statements. Link the relevant criterion in docs/product/feature-spec.md.
+      placeholder: |
+        - [ ] Degraded shows 3 rows (AC-01)
+        - [ ] Visible count equals rendered rows after every filter change (AC-02)
+        - [ ] Works with keyboard and at 390px width (AC-03, AC-04)
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context and constraints
+      description: Files, decisions and contracts the change must respect.
+      placeholder: |
+        Read docs/architecture/ADR-001.md and docs/product/GLOSSARY.md.
+        Likely seam: demo/src/lib/event-view.ts. Keep fixtures and the v1 API unchanged.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+      description: Commands and evidence that show the work is done.
+      placeholder: |
+        npm run check
+        npm run build && npm run test:e2e
+        Desktop and mobile screenshots of the changed state.
+    validations:
+      required: true
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope
+      description: What must not change.
+      placeholder: Visual baselines, fixture data, API schema, workflow files.
