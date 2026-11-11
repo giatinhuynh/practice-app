@@ -4,7 +4,7 @@ A practice repository for a workshop on the agentic software lifecycle with Clau
 
 ## Set up
 
-1. Node 24 and npm, the GitHub CLI signed in (`gh auth login`), and Claude Code signed in.
+1. Node 24 and npm, the GitHub CLI signed in (`gh auth login`), and an agent harness: Claude Code, or DeepSeek Harness (`npm install -g @deepseek-ai/dsh`).
 2. Clone this repository, then `npm ci` and `npx playwright install chromium`.
 3. Check it runs: `npm run check`. The unit tests fail on purpose until the bug is fixed.
 
@@ -15,4 +15,4 @@ A practice repository for a workshop on the agentic software lifecycle with Clau
 3. **Verify:** `npm run check`, `npm run build` and `npm run test:e2e` all pass.
 4. **Review:** open a pull request; a person approves before merge.
 
-`CLAUDE.md` holds the project rules, `.claude/skills/` the methods and `.claude/agents/` the roles Claude can use. All data is fictional.
+`AGENTS.md` and `CLAUDE.md` hold the project rules. Skills are in `.agents/skills/` and `.claude/skills/`, roles for Claude Code in `.claude/agents/`. All data is fictional.
