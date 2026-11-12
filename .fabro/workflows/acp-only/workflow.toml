@@ -1,0 +1,12 @@
+_version = 1
+
+[workflow]
+graph = "workflow.fabro"
+
+[run.environment]
+id = "local"
+
+# DeepSeek Harness stages bring their own model over ACP; this placeholder only satisfies the default-model check.
+[run.model]
+name = "acp-placeholder"
+provider = "acp-only"

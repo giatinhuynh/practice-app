@@ -6,3 +6,8 @@ graph = "workflow.fabro"
 # Run on this Mac, where DeepSeek Harness and the Ollama key live.
 [run.environment]
 id = "local"
+
+# DeepSeek Harness stages bring their own model over ACP; this placeholder only satisfies the default-model check.
+[run.model]
+name = "acp-placeholder"
+provider = "acp-only"

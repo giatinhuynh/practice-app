@@ -1,0 +1,7 @@
+digraph AcpOnly {
+    graph [goal="Say hello"]
+    start [shape=Mdiamond]
+    exit  [shape=Msquare]
+    hi [label="Hi", backend="acp", acp.command="/Users/shinya/.fabro-dsh/dsh-acp.sh", prompt="Reply with one sentence: hello from DeepSeek Harness via ACP. Do not edit files."]
+    start -> hi -> exit
+}
