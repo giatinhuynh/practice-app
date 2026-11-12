@@ -13,11 +13,13 @@ digraph DeepSeekFix {
     approve [shape=hexagon, label="Approve the plan"]
     implement [label="Implement test-first (DeepSeek Harness)", max_visits=3, backend="acp", acp.command="/Users/shinya/.fabro-dsh/dsh-acp.sh",
                prompt="Read plan.md and implement it test-first: write or confirm the failing test, then make the smallest fix. Run npm run test:unit and report the result. Do not weaken or delete any test, do not edit fixtures, and do not touch the v1 API."]
-    check [label="npm run check", script="npm run check 2>&1 | tail -25"]
+    install [label="npm ci", script="npm ci --silent 2>&1 | tail -5"]
+    check [label="npm run check", script="npm run check > .fabro-check.log 2>&1; status=$?; tail -25 .fabro-check.log; exit $status"]
     gate [shape=diamond, label="Checks pass?"]
 
     start -> plan -> approve
-    approve -> implement [label="[A] Approve"]
+    approve -> install [label="[A] Approve"]
+    install -> implement
     approve -> plan      [label="[R] Revise"]
     implement -> check -> gate
     gate -> exit      [label="Pass", condition="outcome=succeeded"]
