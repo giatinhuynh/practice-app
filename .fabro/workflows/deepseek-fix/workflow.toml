@@ -1,0 +1,8 @@
+_version = 1
+
+[workflow]
+graph = "workflow.fabro"
+
+# Run on this Mac, where DeepSeek Harness and the Ollama key live.
+[run.environment]
+id = "local"

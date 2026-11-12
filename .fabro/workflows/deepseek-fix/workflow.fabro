@@ -1,0 +1,25 @@
+digraph DeepSeekFix {
+    graph [
+        goal="Fix the Visible events counter so it always equals the number of rows listed after any status filter (AC-02 in docs/product/feature-spec.md). Keep fixtures and the v1 API unchanged."
+        on_failure="exit"
+    ]
+    rankdir=LR
+
+    start [shape=Mdiamond, label="Start"]
+    exit  [shape=Msquare, label="Exit"]
+
+    plan [label="Plan (DeepSeek Harness)", backend="acp", acp.command="/Users/shinya/.fabro-dsh/dsh-acp.sh",
+          prompt="Read AGENTS.md, docs/product/feature-spec.md and docs/architecture/ADR-001.md, then the code for the goal: {{ goal }}. Write a short step-by-step plan to plan.md in the repository root: the failing test to write first, the smallest fix, and the commands that prove it. Do not change any other file."]
+    approve [shape=hexagon, label="Approve the plan"]
+    implement [label="Implement test-first (DeepSeek Harness)", max_visits=3, backend="acp", acp.command="/Users/shinya/.fabro-dsh/dsh-acp.sh",
+               prompt="Read plan.md and implement it test-first: write or confirm the failing test, then make the smallest fix. Run npm run test:unit and report the result. Do not weaken or delete any test, do not edit fixtures, and do not touch the v1 API."]
+    check [label="npm run check", script="npm run check 2>&1 | tail -25"]
+    gate [shape=diamond, label="Checks pass?"]
+
+    start -> plan -> approve
+    approve -> implement [label="[A] Approve"]
+    approve -> plan      [label="[R] Revise"]
+    implement -> check -> gate
+    gate -> exit      [label="Pass", condition="outcome=succeeded"]
+    gate -> implement [label="Fix"]
+}
