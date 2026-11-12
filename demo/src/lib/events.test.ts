@@ -29,6 +29,11 @@ describe("synthetic fixture contract", () => {
     expect(createEventView(source, "All").visibleCount).toBe(2);
     expect(filterEvents(events, "All")).not.toBe(events);
   });
+  it("derives the empty state when a filter matches no events", () => {
+    const view = createEventView(events.slice(0, 6), "Offline");
+    expect(view.rows).toEqual([]);
+    expect(view.visibleCount).toBe(0);
+  });
   it("rejects unrecognised filters at the boundary", () => {
     for (const value of ["", "degraded", "All ", "__proto__"]) expect(isStatusFilter(value)).toBe(false);
   });
