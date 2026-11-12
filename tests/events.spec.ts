@@ -9,6 +9,16 @@ test("@count-regression Degraded rows and visible count agree", async ({ page })
   await expect(page.getByTestId("visible-count"), "Degraded summary must equal its three rendered rows").toHaveText("3");
 });
 
+test("AC-01 Observed cell shows day, short month and 24-hour UTC time", async ({ page }) => {
+  const observed = page.getByTestId("event-row").first().locator("td[data-label='Observed (UTC)'] time");
+  await expect(observed).toHaveText("21 Oct · 00:42");
+});
+
+test("AC-02 time element keeps the full ISO timestamp in dateTime", async ({ page }) => {
+  const time = page.getByTestId("event-row").first().locator("time");
+  await expect(time).toHaveAttribute("dateTime", "2026-10-21T00:42:00Z");
+});
+
 test("all filter transitions preserve the event/count contract", async ({ page }) => {
   for (const [status, count] of [["All", 12], ["Offline", 3], ["Healthy", 6], ["Degraded", 3], ["All", 12]] as const) {
     const button = page.getByRole("button", { name: status, exact: true });
