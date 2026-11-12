@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { events, filterEvents, isStatusFilter, statusTotals } from "./events";
-import { createEventView } from "./event-view";
+import { createEventView, formatObservedAt } from "./event-view";
 import { GET } from "../app/api/events/route";
 
 describe("synthetic fixture contract", () => {
@@ -31,6 +31,18 @@ describe("synthetic fixture contract", () => {
   });
   it("rejects unrecognised filters at the boundary", () => {
     for (const value of ["", "degraded", "All ", "__proto__"]) expect(isStatusFilter(value)).toBe(false);
+  });
+});
+
+describe("observedAt formatting", () => {
+  it("shows day, short month and 24-hour UTC time", () => {
+    expect(formatObservedAt("2026-10-21T00:42:00Z")).toBe("21 Oct · 00:42");
+  });
+  it("keeps the zero-padded hour just after midnight UTC", () => {
+    expect(formatObservedAt("2026-10-21T00:05:00Z")).toBe("21 Oct · 00:05");
+  });
+  it("uses UTC, not the local zone", () => {
+    expect(formatObservedAt("2026-10-21T23:05:00Z")).toBe("21 Oct · 23:05");
   });
 });
 
