@@ -1,0 +1,6 @@
+{
+  "host": "dsh",
+  "human_merges": true,
+  "verify_commands": ["npm run check"],
+  "notes": "DeepSeek Harness / ACP runs always stop at the Fabro human merge hexagon. This gate only runs after Approve."
+}

@@ -1,0 +1,121 @@
+digraph Factory {
+    graph [
+        goal="Resolve factory ticket {{ inputs.issue }} for NetworkOps Lite. Keep fixtures and the v1 API unchanged. Work test-first against the acceptance criteria in issue.md."
+        on_failure="exit"
+    ]
+    rankdir=LR
+
+    start [shape=Mdiamond, label="Start"]
+    exit  [shape=Msquare, label="Exit"]
+
+    intake [label="Intake ticket", shape=parallelogram,
+            script="bash scripts/factory-intake.sh {{ inputs.issue }}"]
+
+    // Label routing (Superboard): qa skips Plan/Build; bug|feature → Build path
+    route_probe [label="Read route", shape=parallelogram,
+                 script="bash scripts/factory-route.sh"]
+    route_gate [shape=diamond, label="Lane?"]
+
+    plan [label="Plan (DeepSeek Harness)", backend="acp", acp.command="/Users/shinya/.fabro-dsh/dsh-acp.sh",
+          prompt="Read AGENTS.md, docs/product/feature-spec.md, docs/architecture/ADR-001.md, factory-playbook.md and issue.md for the goal: {{ goal }}. Write a short step-by-step plan to plan.md in the repository root: the failing test to write first, the smallest fix, and the commands that prove it. Do not change any other file."]
+
+    approve [shape=hexagon, label="Approve the plan"]
+
+    install [label="npm ci", script="npm ci --silent 2>&1 | tail -5"]
+
+    // After install: qa-routed tickets jump to Check; others enter Build
+    post_install [label="Skip Build?", shape=parallelogram,
+                  script="bash scripts/factory-route.sh"]
+    post_install_gate [shape=diamond, label="Skip Build?"]
+
+    // —— Build lane (Super Build) ——
+    build [label="Build (DeepSeek Harness)", max_visits=3, backend="acp", acp.command="/Users/shinya/.fabro-dsh/dsh-acp.sh",
+           prompt="@prompts/build.md"]
+
+    build_check [label="Build receipt", shape=parallelogram,
+                 script="bash scripts/factory-lane-gate.sh build"]
+
+    build_gate [shape=diamond, label="Build pass?"]
+
+    // —— Verify ——
+    check [label="npm run check", script="npm run check > .fabro-check.log 2>&1; status=$?; tail -25 .fabro-check.log; exit $status"]
+
+    check_gate [shape=diamond, label="Checks pass?"]
+
+    open_pr [label="Open draft PR", shape=parallelogram,
+             script="bash scripts/factory-open-pr.sh {{ inputs.issue }}"]
+
+    // —— QA lane (Super QA) ——
+    qa [label="QA (DeepSeek Harness)", max_visits=3, backend="acp", acp.command="/Users/shinya/.fabro-dsh/dsh-acp.sh",
+        prompt="@prompts/qa.md"]
+
+    qa_check [label="QA receipt", shape=parallelogram,
+              script="bash scripts/factory-lane-gate.sh qa"]
+
+    qa_gate [shape=diamond, label="QA pass?"]
+
+    qa_bounce [label="QA bounce?", shape=parallelogram,
+               script="bash scripts/factory-lane-bounce.sh"]
+
+    // —— Review lane (Super Review) ——
+    review [label="Review (DeepSeek Harness)", max_visits=3, backend="acp", acp.command="/Users/shinya/.fabro-dsh/dsh-acp.sh",
+            prompt="@prompts/review.md"]
+
+    review_check [label="Review receipt", shape=parallelogram,
+                  script="bash scripts/factory-lane-gate.sh review"]
+
+    review_gate [shape=diamond, label="Review pass?"]
+
+    bounce_probe [label="Review bounce?", shape=parallelogram,
+                  script="bash scripts/factory-review-bounce.sh"]
+
+    // —— Human merge (dsh policy) + calibrate ——
+    merge_gate [shape=hexagon, label="Approve merge (human)"]
+
+    merge_bounce [label="Merge revise?", shape=parallelogram,
+                  script="bash scripts/factory-lane-bounce.sh"]
+
+    merge_check [label="Merge gate", shape=parallelogram,
+                 script="bash scripts/factory-merge-gate.sh"]
+
+    calibrate [label="Calibrate (DeepSeek Harness)", backend="acp", acp.command="/Users/shinya/.fabro-dsh/dsh-acp.sh",
+               prompt="The human merge gate passed. Apply the `calibrate` skill: read factory-playbook.md, plan.md if present, issue.md, qa-report.md, review.md, .fabro-route.json, .fabro-merge.json (required), lane receipts (.fabro-build.json, .fabro-qa.json, .fabro-review.json), .fabro-pr.json if present, .fabro-check.log, and the last commit (git log -1 --stat) with its diff. Append exactly one bounded lesson to factory-playbook.md only if .fabro-merge.json exists and checks were green. Update ONLY factory-playbook.md; do not edit any skill file, AGENTS.md, CLAUDE.md, fixtures or the v1 API. If .fabro-merge.json is missing, report skipped and change nothing."]
+
+    start -> intake -> route_probe -> route_gate
+    route_gate -> install [label="QA", condition="outcome=succeeded"]
+    route_gate -> plan    [label="Build"]
+
+    plan -> approve
+    approve -> install [label="[A] Approve"]
+    approve -> plan    [label="[R] Revise"]
+
+    install -> post_install -> post_install_gate
+    post_install_gate -> check [label="QA", condition="outcome=succeeded"]
+    post_install_gate -> build [label="Build"]
+
+    build -> build_check -> build_gate
+    build_gate -> check [label="Pass", condition="outcome=succeeded"]
+    build_gate -> build [label="Fix"]
+
+    check -> check_gate
+    check_gate -> open_pr [label="Pass", condition="outcome=succeeded"]
+    check_gate -> build   [label="Fix"]
+
+    open_pr -> qa -> qa_check -> qa_gate
+    qa_gate -> review    [label="Pass", condition="outcome=succeeded"]
+    qa_gate -> qa_bounce [label="Fix"]
+    qa_bounce -> qa    [label="QA", condition="outcome=succeeded"]
+    qa_bounce -> build [label="Build"]
+
+    review -> review_check -> review_gate
+    review_gate -> merge_gate    [label="Pass", condition="outcome=succeeded"]
+    review_gate -> bounce_probe  [label="Fix"]
+    bounce_probe -> qa    [label="QA", condition="outcome=succeeded"]
+    bounce_probe -> build [label="Build"]
+
+    merge_gate -> merge_check  [label="[A] Approve"]
+    merge_gate -> merge_bounce [label="[R] Revise"]
+    merge_bounce -> qa    [label="QA", condition="outcome=succeeded"]
+    merge_bounce -> build [label="Build"]
+    merge_check -> calibrate -> exit
+}

@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "description": "Local Ready queue for offline / demo board drains (source=local)",
+  "cards": [
+    {
+      "issue": "ac-02-visible-count",
+      "title": "Fix Visible events counter (AC-02)",
+      "labels": [
+        "bug"
+      ],
+      "lane": "build",
+      "fabro_run": "01M7DY8RPG1TPW3D1JE5J6SPFW"
+    },
+    {
+      "issue": "qa-visible-count",
+      "title": "QA: Visible events counter (AC-02)",
+      "labels": [
+        "qa"
+      ],
+      "lane": "qa"
+    },
+    {
+      "issue": "test",
+      "title": "test",
+      "labels": [
+        "qa"
+      ],
+      "lane": "qa",
+      "kind": "qa",
+      "classification": {
+        "source": "heuristic",
+        "confidence": 0.65,
+        "reasons": [
+          "score:qa=1"
+        ]
+      },
+      "fabro_run": "01M7DYEGCEWY72ZF15QCRGQ1TR"
+    }
+  ]
+}

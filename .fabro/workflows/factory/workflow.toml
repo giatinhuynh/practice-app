@@ -1,0 +1,19 @@
+_version = 1
+
+[workflow]
+graph = "workflow.fabro"
+
+# Run on this Mac, where DeepSeek Harness and the Ollama key live.
+# (Fabro auto PR creation requires Docker/Daytona; this factory opens PRs via scripts/factory-open-pr.sh instead.)
+[run.environment]
+id = "local"
+
+# DeepSeek Harness stages bring their own model over ACP; this placeholder only satisfies the default-model check.
+[run.model]
+name = "acp-placeholder"
+provider = "acp-only"
+
+# Ticket slug under docs/factory/tickets/<slug>.md, or a GitHub issue number.
+# Override at run time: fabro run factory --environment local -I issue=123
+[run.inputs]
+issue = "ac-02-visible-count"

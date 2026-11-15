@@ -8,3 +8,24 @@ artifacts/
 !.env.example
 .DS_Store
 .claude/settings.local.json
+
+# Factory run receipts (written inside Fabro scratch / local runs)
+issue.md
+plan.md
+qa-report.md
+review.md
+.fabro-intake.json
+.fabro-route.json
+.fabro-wave.json
+.fabro-build.json
+.fabro-qa.json
+.fabro-review.json
+.fabro-pr.json
+.fabro-merge.json
+.fabro-check.log
+.fabro/merge.lock/
+.fabro/control-room-board.json
+push.err
+pr.err
+docs/factory/runs/**
+!docs/factory/runs/.gitkeep

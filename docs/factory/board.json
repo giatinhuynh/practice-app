@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "description": "Fabro factory board orchestrator — drains Ready into fabro run factory",
+  "source": "local",
+  "super_board_config": ".claude/super-board/configs/practice-app.json",
+  "ready_column": "Ready",
+  "done_column": "Done",
+  "building_column": "Building",
+  "blocked_column": "Blocked",
+  "factory_workflow": "factory",
+  "environment": "local",
+  "max_cards": 5,
+  "serial": true,
+  "local_ready": "docs/factory/ready/queue.json",
+  "runs_dir": "docs/factory/runs"
+}
