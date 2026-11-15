@@ -11,8 +11,10 @@ digraph Factory {
     intake [label="Intake ticket", shape=parallelogram,
             script="bash scripts/factory-intake.sh {{ inputs.issue }}"]
 
-    // Label routing (Superboard): qa skips Plan/Build; bug|feature → Build path
-    route_probe [label="Read route", shape=parallelogram,
+    // Label routing (Superboard): qa skips Plan/Build; bug|feature → Build path.
+    // Exit 2 = Build lane; on_failure=route lets the diamond take the unconditional edge
+    // instead of aborting the run under graph on_failure=exit.
+    route_probe [label="Read route", shape=parallelogram, on_failure="route",
                  script="bash scripts/factory-route.sh"]
     route_gate [shape=diamond, label="Lane?"]
 
@@ -24,7 +26,7 @@ digraph Factory {
     install [label="npm ci", script="npm ci --silent 2>&1 | tail -5"]
 
     // After install: qa-routed tickets jump to Check; others enter Build
-    post_install [label="Skip Build?", shape=parallelogram,
+    post_install [label="Skip Build?", shape=parallelogram, on_failure="route",
                   script="bash scripts/factory-route.sh"]
     post_install_gate [shape=diamond, label="Skip Build?"]
 
@@ -32,13 +34,14 @@ digraph Factory {
     build [label="Build (DeepSeek Harness)", max_visits=3, backend="acp", acp.command="/Users/shinya/.fabro-dsh/dsh-acp.sh",
            prompt="@prompts/build.md"]
 
-    build_check [label="Build receipt", shape=parallelogram,
+    build_check [label="Build receipt", shape=parallelogram, on_failure="route",
                  script="bash scripts/factory-lane-gate.sh build"]
 
     build_gate [shape=diamond, label="Build pass?"]
 
     // —— Verify ——
-    check [label="npm run check", script="npm run check > .fabro-check.log 2>&1; status=$?; tail -25 .fabro-check.log; exit $status"]
+    check [label="npm run check", on_failure="route",
+           script="npm run check > .fabro-check.log 2>&1; status=$?; tail -25 .fabro-check.log; exit $status"]
 
     check_gate [shape=diamond, label="Checks pass?"]
 
@@ -49,30 +52,30 @@ digraph Factory {
     qa [label="QA (DeepSeek Harness)", max_visits=3, backend="acp", acp.command="/Users/shinya/.fabro-dsh/dsh-acp.sh",
         prompt="@prompts/qa.md"]
 
-    qa_check [label="QA receipt", shape=parallelogram,
+    qa_check [label="QA receipt", shape=parallelogram, on_failure="route",
               script="bash scripts/factory-lane-gate.sh qa"]
 
     qa_gate [shape=diamond, label="QA pass?"]
 
-    qa_bounce [label="QA bounce?", shape=parallelogram,
+    qa_bounce [label="QA bounce?", shape=parallelogram, on_failure="route",
                script="bash scripts/factory-lane-bounce.sh"]
 
     // —— Review lane (Super Review) ——
     review [label="Review (DeepSeek Harness)", max_visits=3, backend="acp", acp.command="/Users/shinya/.fabro-dsh/dsh-acp.sh",
             prompt="@prompts/review.md"]
 
-    review_check [label="Review receipt", shape=parallelogram,
+    review_check [label="Review receipt", shape=parallelogram, on_failure="route",
                   script="bash scripts/factory-lane-gate.sh review"]
 
     review_gate [shape=diamond, label="Review pass?"]
 
-    bounce_probe [label="Review bounce?", shape=parallelogram,
+    bounce_probe [label="Review bounce?", shape=parallelogram, on_failure="route",
                   script="bash scripts/factory-review-bounce.sh"]
 
     // —— Human merge (dsh policy) + calibrate ——
     merge_gate [shape=hexagon, label="Approve merge (human)"]
 
-    merge_bounce [label="Merge revise?", shape=parallelogram,
+    merge_bounce [label="Merge revise?", shape=parallelogram, on_failure="route",
                   script="bash scripts/factory-lane-bounce.sh"]
 
     merge_check [label="Merge gate", shape=parallelogram,
