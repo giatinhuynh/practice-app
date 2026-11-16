@@ -56,7 +56,24 @@
           "score:feature=2.4"
         ]
       },
-      "fabro_run": "01M7GZJPM96M1ZMMK1SZEBZAH5"
+      "fabro_run": "01M7GZP7R6DWGMHK94HTPGPXJC"
+    },
+    {
+      "issue": "add-some-crazy-featrue-and-cool",
+      "title": "ADD SOME CRAZY FEATRUE AND COOL",
+      "labels": [
+        "feature"
+      ],
+      "lane": "build",
+      "kind": "feature",
+      "status": "Ready",
+      "classification": {
+        "source": "heuristic",
+        "confidence": 0.69,
+        "reasons": [
+          "score:feature=1.2"
+        ]
+      }
     }
   ]
 }
