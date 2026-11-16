@@ -66,14 +66,15 @@
       ],
       "lane": "build",
       "kind": "feature",
-      "status": "Ready",
+      "status": "Blocked",
       "classification": {
         "source": "heuristic",
         "confidence": 0.69,
         "reasons": [
           "score:feature=1.2"
         ]
-      }
+      },
+      "fabro_run": "01M7HGBZ8EQ2V7AVE4F6QV7V8Q"
     }
   ]
 }
