@@ -24,7 +24,7 @@ export function Dashboard({ events }: { events: readonly NetworkEvent[] }) {
     </aside>
     <div className="workspace">
       <header className="topbar"><div className="breadcrumb">Operations <span>/</span> <strong>Event overview</strong></div><div className="environment"><span className="environment-dot" /> Synthetic environment</div></header>
-      <main id="main" tabIndex={-1}>
+      <main id="main" tabIndex={-1} data-aura={view.aura} data-testid="dashboard-aura">
         <div className="page-heading"><div><p className="eyebrow">NETWORK ASSURANCE / WORKSHOP</p><h1>Event overview<span className="heading-dot">.</span></h1><p className="intro">Explore network events. Focus on what needs attention.</p></div><div className="snapshot"><span className="snapshot-label">FIXED DATA SNAPSHOT</span><strong>21 Oct 2026 · 00:42 UTC</strong></div></div>
         <div className="synthetic-banner"><span className="banner-icon" aria-hidden="true">i</span><p><strong>Built for learning.</strong> All assets and events are fictional. No live network connection.</p><span className="sample-tag">SYNTHETIC DATA</span></div>
         <section className="metrics" aria-label="Event summary">

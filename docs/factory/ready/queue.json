@@ -9,7 +9,8 @@
         "bug"
       ],
       "lane": "build",
-      "fabro_run": "01M7DY8RPG1TPW3D1JE5J6SPFW"
+      "fabro_run": "01M7GV2A37HAWZ9DSS0CPBJQ68",
+      "status": "Building"
     },
     {
       "issue": "qa-visible-count",
@@ -17,7 +18,9 @@
       "labels": [
         "qa"
       ],
-      "lane": "qa"
+      "lane": "qa",
+      "fabro_run": "01M7GXCTEBH212ACVCEHMTM0YG",
+      "status": "Building"
     },
     {
       "issue": "test",
@@ -34,7 +37,44 @@
           "score:qa=1"
         ]
       },
-      "fabro_run": "01M7DYEGCEWY72ZF15QCRGQ1TR"
+      "fabro_run": "01M7GXCR02TXE0CY2M7QQKZVF8",
+      "status": "Building"
+    },
+    {
+      "issue": "a-new-feature",
+      "title": "A new feature",
+      "labels": [
+        "feature"
+      ],
+      "lane": "build",
+      "kind": "feature",
+      "status": "Blocked",
+      "classification": {
+        "source": "heuristic",
+        "confidence": 0.88,
+        "reasons": [
+          "score:feature=2.4"
+        ]
+      },
+      "fabro_run": "01M7GZP7R6DWGMHK94HTPGPXJC"
+    },
+    {
+      "issue": "add-some-crazy-featrue-and-cool",
+      "title": "ADD SOME CRAZY FEATRUE AND COOL",
+      "labels": [
+        "feature"
+      ],
+      "lane": "build",
+      "kind": "feature",
+      "status": "Blocked",
+      "classification": {
+        "source": "heuristic",
+        "confidence": 0.69,
+        "reasons": [
+          "score:feature=1.2"
+        ]
+      },
+      "fabro_run": "01M7HGBZ8EQ2V7AVE4F6QV7V8Q"
     }
   ]
 }
