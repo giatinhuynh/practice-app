@@ -23,17 +23,11 @@ describe("synthetic fixture contract", () => {
     expect(events).toHaveLength(12);
   });
   it("handles empty and changed source collections without magic numbers", () => {
-    expect(createEventView([], "Degraded")).toEqual({ rows: [], visibleCount: 0, aura: "calm" });
+    expect(createEventView([], "Degraded")).toEqual({ rows: [], visibleCount: 0 });
     const source = events.slice(0, 2);
-    expect(createEventView(source, "Offline")).toEqual({ rows: [], visibleCount: 0, aura: "calm" });
+    expect(createEventView(source, "Offline")).toEqual({ rows: [], visibleCount: 0 });
     expect(createEventView(source, "All").visibleCount).toBe(2);
     expect(filterEvents(events, "All")).not.toBe(events);
-  });
-  it.each([["All", "critical"], ["Offline", "critical"], ["Degraded", "watch"], ["Healthy", "calm"]] as const)("derives aura %s -> %s", (filter, aura) => {
-    expect(createEventView(events, filter).aura).toBe(aura);
-  });
-  it("keeps aura calm for an empty view", () => {
-    expect(createEventView([], "Degraded")).toEqual({ rows: [], visibleCount: 0, aura: "calm" });
   });
   it("rejects unrecognised filters at the boundary", () => {
     for (const value of ["", "degraded", "All ", "__proto__"]) expect(isStatusFilter(value)).toBe(false);
