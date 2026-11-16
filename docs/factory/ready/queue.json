@@ -9,7 +9,8 @@
         "bug"
       ],
       "lane": "build",
-      "fabro_run": "01M7DY8RPG1TPW3D1JE5J6SPFW"
+      "fabro_run": "01M7DY8RPG1TPW3D1JE5J6SPFW",
+      "status": "Blocked"
     },
     {
       "issue": "qa-visible-count",
@@ -34,7 +35,19 @@
           "score:qa=1"
         ]
       },
-      "fabro_run": "01M7DYEGCEWY72ZF15QCRGQ1TR"
+      "fabro_run": "01M7DYEGCEWY72ZF15QCRGQ1TR",
+      "status": "Blocked"
+    },
+    {
+      "issue": "add-some-crazy-featrue-and-cool",
+      "title": "ADD SOME CRAZY FEATRUE AND COOL",
+      "labels": [
+        "feature"
+      ],
+      "lane": "build",
+      "kind": "feature",
+      "status": "Blocked",
+      "fabro_run": "01M7HGPZ9YG8N6P19YJ7F7ZJEQ"
     }
   ]
 }
