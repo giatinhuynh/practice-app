@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { createEventView } from "../lib/event-view";
 import { statuses, statusTotals, type NetworkEvent, type StatusFilter } from "../lib/events";
+import { createRegionHealth } from "../lib/region-health";
+import { RegionHealthMap } from "./region-health-map";
 
 function NetworkMark() {
   return <svg aria-hidden="true" width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M7 7L21 14L7 21V7Z" stroke="currentColor" strokeWidth="1.6"/><circle cx="7" cy="7" r="3" fill="currentColor"/><circle cx="21" cy="14" r="3" fill="currentColor"/><circle cx="7" cy="21" r="3" fill="currentColor"/></svg>;
@@ -12,6 +14,7 @@ export function Dashboard({ events }: { events: readonly NetworkEvent[] }) {
   const [filter, setFilter] = useState<StatusFilter>("All");
   const view = createEventView(events, filter);
   const totals = statusTotals(events);
+  const regions = createRegionHealth(events);
 
   return <>
     <a className="skip-link" href="#main">Skip to event overview</a>
@@ -31,6 +34,7 @@ export function Dashboard({ events }: { events: readonly NetworkEvent[] }) {
           <div className="metric metric-primary"><div className="metric-label">Visible events <span aria-hidden="true">↗</span></div><div className="metric-number" data-testid="visible-count">{view.visibleCount}</div><div className="metric-description" role="status" aria-live="polite" aria-atomic="true">{view.visibleCount} {filter === "All" ? "events across all statuses" : `${filter.toLowerCase()} events in view`}</div></div>
           {statuses.map((status) => <div className={`metric metric-${status.toLowerCase()}`} key={status}><div className="metric-label"><span className={`status-dot ${status.toLowerCase()}`} />{status}</div><div className="metric-number">{totals[status]}</div><div className="metric-description">{status === "Healthy" ? "Operating normally" : status === "Degraded" ? "Requires attention" : "Connection unavailable"}<span className="metric-percent">{Math.round(totals[status] / events.length * 100)}%</span></div></div>)}
         </section>
+        <RegionHealthMap regions={regions} />
         <section className="events-panel" aria-labelledby="events-heading">
           <div className="panel-heading"><div><h2 id="events-heading">Network events <span className="total-badge">{events.length} total</span></h2><p>Filter the event list by operational status.</p></div><span className="read-only"><span aria-hidden="true">◈</span> Read-only snapshot</span></div>
           <div className="filter-toolbar"><div className="filter-group" role="group" aria-label="Filter events by status">{(["All", ...statuses] as const).map((status) => <button key={status} type="button" aria-pressed={filter === status} onClick={() => setFilter(status)}>{status !== "All" && <span aria-hidden="true" className={`status-dot ${status.toLowerCase()}`} />}{status}<span className="filter-count" aria-hidden="true">{status === "All" ? events.length : totals[status]}</span></button>)}</div><span className="result-label">{view.rows.length} of {events.length} events</span></div>
