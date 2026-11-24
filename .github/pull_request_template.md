@@ -11,6 +11,7 @@ Link the issue and the relevant criterion in docs/product/feature-spec.md. Descr
 
 ## Verification evidence
 
+- Verification artifact from the `verify-*` skill: what was proved, the evidence, and what was not checked:
 - Commands actually executed, with outcomes:
 - Browser report and desktop/mobile visual evidence:
 - Accessibility and keyboard findings:

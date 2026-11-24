@@ -15,7 +15,7 @@ Read `docs/product/feature-spec.md` (what to build, criteria AC-01 to AC-07), `d
 
 ## Rules
 
-- Work test-first: a failing test for the criterion, the smallest fix, then the same test passing.
+- Follow TDD: a failing test for the criterion, the smallest fix, then the same test passing.
 - Rows and the visible count must come from one derived collection (`demo/src/lib/event-view.ts`).
 - Keep the synthetic data and the v1 API unchanged.
 - Don't weaken or delete tests, and don't edit `.github/` or `.claude/` unless the GitHub issue asks for it.
@@ -24,3 +24,13 @@ Read `docs/product/feature-spec.md` (what to build, criteria AC-01 to AC-07), `d
 ## Skills
 
 The same four skills are in `.agents/skills/` (DeepSeek Harness and other harnesses) and `.claude/skills/` (Claude Code): `spec-first`, `tdd`, `verify-ui`, `review-change`.
+
+## Verify before you hand over
+
+Prove every change by using the app the way a user would. Your own summary, or "it compiles", is not proof (`principle-prove-it-works`).
+
+- If `.agents/skills/` has no `verify-*` skill yet, stop and ask a person to run `/create-verification-skill` once.
+- For every change, run the `verify-*` skill and keep a decision log with `show-me-your-work`.
+- Put the verification artifact in the pull request under "Verification evidence": what you proved, the evidence, and what you could not check.
+
+`create-verification-skill`, `maintain-verification-skill`, `principle-prove-it-works` and `show-me-your-work` come from pstack under the MIT License; see `.agents/PSTACK-LICENSE.md`.
