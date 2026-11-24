@@ -29,7 +29,7 @@ The same four skills are in `.agents/skills/` (DeepSeek Harness and other harnes
 
 Prove every change by using the app the way a user would. Your own summary, or "it compiles", is not proof (`principle-prove-it-works`).
 
-- If `.agents/skills/` has no `verify-*` skill yet, stop and ask a person to run `/create-verification-skill` once.
+- If `.agents/skills/` has no `verify-*` skill yet, verify with `npm run verify` and desktop and phone screenshots instead, and say in the artifact that a person should run `/create-verification-skill` once.
 - For every change, run the `verify-*` skill and keep a decision log with `show-me-your-work`.
 - Put the verification artifact in the pull request under "Verification evidence": what you proved, the evidence, and what you could not check.
 
